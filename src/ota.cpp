@@ -28,9 +28,10 @@
 #define NODEMCU_D12 10
 
 
-#define VFD_CS_PIN 13   //Just an example, specify your own correct pin number! This is STB in PT6311 datasheet notation.
-#define VFD_CLK_PIN 12  //Just an example, specify your own correct pin number! This is CLK in PT6311 datasheet notation.
-#define VFD_DATA_PIN 14 //Just an example, specify your own correct pin number! This is DIN in PT6311 datasheet notation.
+#define VFD_CS_PIN D1   //Just an example, specify your own correct pin number! This is STB in PT6311 datasheet notation.
+#define VFD_CLK_PIN D2  //Just an example, specify your own correct pin number! This is CLK in PT6311 datasheet notation.
+#define VFD_DATA_PIN D3 //Just an example, specify your own correct pin number! This is DIN in PT6311 datasheet notation.
+
 
 //#define VFD_CS_PIN GPIO13   //Just an example, specify your own correct pin number! This is STB in PT6311 datasheet notation.
 //#define VFD_CLK_PIN GPIO12  //Just an example, specify your own correct pin number! This is CLK in PT6311 datasheet notation.

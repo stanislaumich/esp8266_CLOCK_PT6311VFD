@@ -77,7 +77,9 @@ void PT6311::command(uint8_t value, uint8_t nodata)
         else 
             digitalWrite(_data, LOW);
         digitalWrite(_sclk, LOW);
+        //delay(10);//8266
         digitalWrite(_sclk, HIGH);
+        //delay(10);//8266
     }
     if (nodata > 0) digitalWrite(_cs, HIGH);
 }
@@ -120,7 +122,9 @@ void PT6311::data(uint8_t value, uint8_t init_cs, uint8_t finalise_cs)
         else 
             digitalWrite(_data, LOW);
         digitalWrite(_sclk, LOW);
+        //delay(10);//8266
         digitalWrite(_sclk, HIGH);
+        //delay(10);//8266
     }
     if (finalise_cs > 0) digitalWrite(_cs, HIGH);
 }
