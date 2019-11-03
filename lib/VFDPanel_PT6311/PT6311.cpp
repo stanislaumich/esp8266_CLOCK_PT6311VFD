@@ -32,7 +32,7 @@ void PT6311::reset(uint8_t mode)
 
     //Set display mode
     command(mode & PT6311_LOW_NIBBLES_SET, true);
-    displayOnCmd(VFD_DIMMING_MAX);//maximum brightness
+    displayOnCmd(7/*VFD_DIMMING_MAX*/);//maximum brightness
 }
 
 void PT6311::displayOnCmd(uint8_t dimming)

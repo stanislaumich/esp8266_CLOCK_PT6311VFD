@@ -28,23 +28,14 @@
 #define NODEMCU_D12 10
 
 
-#define VFD_CS_PIN D1   //Just an example, specify your own correct pin number! This is STB in PT6311 datasheet notation.
-#define VFD_CLK_PIN D2  //Just an example, specify your own correct pin number! This is CLK in PT6311 datasheet notation.
-#define VFD_DATA_PIN D3 //Just an example, specify your own correct pin number! This is DIN in PT6311 datasheet notation.
-
-
-//#define VFD_CS_PIN GPIO13   //Just an example, specify your own correct pin number! This is STB in PT6311 datasheet notation.
-//#define VFD_CLK_PIN GPIO12  //Just an example, specify your own correct pin number! This is CLK in PT6311 datasheet notation.
-//#define VFD_DATA_PIN GPIO14 //Just an example, specify your own correct pin number! This is DIN in PT6311 datasheet notation.
-
-//#define VFD_CS_PIN 2   //Just an example, specify your own correct pin number! This is STB in PT6311 datasheet notation.
-//#define VFD_CLK_PIN 3  //Just an example, specify your own correct pin number! This is CLK in PT6311 datasheet notation.
-//#define VFD_DATA_PIN 4 //Just an example, specify your own correct pin number! This is DIN in PT6311 datasheet notation.
+#define VFD_CS_PIN D1   //blue 
+#define VFD_CLK_PIN D2  //gray 
+#define VFD_DATA_PIN D3 //brown 
 
 
 #define VFD_BYTES_PER_DIGIT 3      //3
 PT6311 pt6311_driver;
-
+// numbers
 int f[10]={140,128,12,132,128,132,140,128,140,132};
 int s[10]={196,64,195,195,71,135,135,192,199,199};
 
@@ -324,22 +315,21 @@ void myinitf(){
 void myinitl(){}
 
 void setup(void){
- Serial.begin(9600);
- Serial.println("Start Setup...");
- Serial.println("myinitf()");
- //Initialise pins
+ //----------------Display INIT
   pt6311_driver.init(VFD_CS_PIN, VFD_CLK_PIN, VFD_DATA_PIN);
-  
-  //Switch display on. Just an example, specify correct mode (number of digits and segment for your hardware)
   pt6311_driver.reset(VFD_DISP_MODE_10D18S); // good VFD_DISP_MODE_10D18S
-  //If doesn't work try also VFD_DISP_MODE_9D19S, VFD_DISP_MODE_10D18S, VFD_DISP_MODE_11D17S VFD_DISP_MODE_12D16S
-
-  for (uint8_t i = 0; i < 12; i++) //9
+   for (uint8_t i = 0; i < 12; i++) 
   {
       fill_mem(0x00, VFD_BYTES_PER_DIGIT, i * VFD_BYTES_PER_DIGIT);
       delay(10); 
-      //fill_mem(0, VFD_BYTES_PER_DIGIT * 9, 0);
   }
+  showtime(0,0,0);
+  //----------------Display
+
+ Serial.begin(9600);
+ Serial.println("Start Setup...");
+ Serial.println("myinitf()");
+ 
 
  myinitf();
  SPIFFS.begin();
