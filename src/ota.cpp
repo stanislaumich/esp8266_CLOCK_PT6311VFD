@@ -38,6 +38,10 @@ PT6311 pt6311_driver;
 // numbers
 int f[10]={140,128,12,132,128,132,140,128,140,132};
 int s[10]={196,64,195,195,71,135,135,192,199,199};
+// symbols
+int sf[10]={140,128,12,132,128,132,140,128,140,132};
+int ss[10]={196,64,195,195,71,135,135,192,199,199};
+
 
 ////////////////////////////////////////////////////////////////////////////////
 ESP8266WiFiMulti WiFiMulti;
@@ -76,11 +80,30 @@ void write_raw(uint8_t value, uint8_t number_of_bytes)
 
 void fill_mem(uint8_t value, uint8_t number_of_bytes, uint8_t start_addr)
 {
-    //Set PT6311 address to point at 0x0 (the very beginning of its frame buffer)
     pt6311_driver.addrSetCmd(start_addr); 
-
-    //And finally, switch on all segments for first three digits to make sure that display works.
     write_raw(value, number_of_bytes);
+}
+
+void showfirst(int s1,int s2, int s3)
+{
+//27
+  pt6311_driver.addrSetCmd(27);
+  pt6311_driver.displayMemWriteCmd(true, false);
+  pt6311_driver.data(sf[s1]+0, false, false);
+  pt6311_driver.data(ss[s1], false, false);
+  pt6311_driver.data(0, false, true);
+//24
+pt6311_driver.addrSetCmd(24);
+  pt6311_driver.displayMemWriteCmd(true, false);
+  pt6311_driver.data(sf[s2]+2, false, false);
+  pt6311_driver.data(ss[s2], false, false);
+  pt6311_driver.data(0, false, true);
+//21
+pt6311_driver.addrSetCmd(21);
+  pt6311_driver.displayMemWriteCmd(true, false);
+  pt6311_driver.data(sf[s3]+0, false, false);
+  pt6311_driver.data(ss[s3], false, false);
+  pt6311_driver.data(0, false, true);  
 }
 
 void showtime(int h, int m,int ss)
