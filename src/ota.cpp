@@ -86,7 +86,7 @@ void fill_mem(uint8_t value, uint8_t number_of_bytes, uint8_t start_addr)
 
 void showfirst(int s1,int s2, int s3)
 {
-//27
+  //27
   pt6311_driver.addrSetCmd(27);
   pt6311_driver.displayMemWriteCmd(true, false);
   pt6311_driver.data(sf[s1]+0, false, false);
