@@ -92,14 +92,14 @@ void showfirst(int s1,int s2, int s3)
   pt6311_driver.data(sf[s1]+0, false, false);
   pt6311_driver.data(ss[s1], false, false);
   pt6311_driver.data(0, false, true);
-//24
-pt6311_driver.addrSetCmd(24);
+  //24
+  pt6311_driver.addrSetCmd(24);
   pt6311_driver.displayMemWriteCmd(true, false);
   pt6311_driver.data(sf[s2]+2, false, false);
   pt6311_driver.data(ss[s2], false, false);
   pt6311_driver.data(0, false, true);
-//21
-pt6311_driver.addrSetCmd(21);
+  //21
+  pt6311_driver.addrSetCmd(21);
   pt6311_driver.displayMemWriteCmd(true, false);
   pt6311_driver.data(sf[s3]+0, false, false);
   pt6311_driver.data(ss[s3], false, false);
@@ -108,50 +108,42 @@ pt6311_driver.addrSetCmd(21);
 
 void showtime(int h, int m,int ss)
 {
-//18
+  //18
   pt6311_driver.addrSetCmd(18);
   pt6311_driver.displayMemWriteCmd(true, false);
-  //pt6311_driver.data(0, false, false);
   pt6311_driver.data(f[(h-h%10)/10]+0, false, false);
   pt6311_driver.data(s[(h-h%10)/10], false, false);
   pt6311_driver.data(0, false, true);
-//15
-pt6311_driver.addrSetCmd(15);
+  //15
+  pt6311_driver.addrSetCmd(15);
   pt6311_driver.displayMemWriteCmd(true, false);
-  //pt6311_driver.data(0, false, false);
   pt6311_driver.data(f[h%10]+2, false, false);
   pt6311_driver.data(s[h%10], false, false);
   pt6311_driver.data(0, false, true);
-//12
-pt6311_driver.addrSetCmd(12);
+  //12
+  pt6311_driver.addrSetCmd(12);
   pt6311_driver.displayMemWriteCmd(true, false);
-  //pt6311_driver.data(0, false, false);
   pt6311_driver.data(f[(m-m%10)/10]+0, false, false);
   pt6311_driver.data(s[(m-m%10)/10], false, false);
   pt6311_driver.data(0, false, true);
-//9
-pt6311_driver.addrSetCmd(9);
+  //9
+  pt6311_driver.addrSetCmd(9);
   pt6311_driver.displayMemWriteCmd(true, false);
-  //pt6311_driver.data(0, false, false);
   pt6311_driver.data(f[m%10]+2, false, false);
   pt6311_driver.data(s[m%10], false, false);
   pt6311_driver.data(0, false, true);
-//6
-pt6311_driver.addrSetCmd(6);
+  //6
+  pt6311_driver.addrSetCmd(6);
   pt6311_driver.displayMemWriteCmd(true, false);
-  //pt6311_driver.data(0, false, false);
   pt6311_driver.data(f[(ss-ss%10)/10]+0, false, false);
   pt6311_driver.data(s[(ss-ss%10)/10], false, false);
   pt6311_driver.data(0, false, true);
-//3
-pt6311_driver.addrSetCmd(3);
+  //3
+  pt6311_driver.addrSetCmd(3);
   pt6311_driver.displayMemWriteCmd(true, false);
-  //pt6311_driver.data(0, false, false);
   pt6311_driver.data(f[ss%10], false, false);
   pt6311_driver.data(s[ss%10], false, false);
   pt6311_driver.data(0, false, true);
-
-
 }
 
 void initWiFi(){////////////////////////////////////////////////////////////////
@@ -200,14 +192,6 @@ void handleRoot() {
   msg(1);
   myIP = WiFi.softAPIP();
   message=">>>/u update /reboot IP=";
-  /*message.concat(myIP%256);message.concat(".");
-  myIP=(myIP-(myIP%256))/256;
-  message.concat(myIP%256);message.concat(".");
-  myIP=(myIP-(myIP%256))/256;
-  message.concat(myIP%256);message.concat(".");
-  myIP=myIP%256;
-  message.concat(myIP);//message.concat(".");
-  */
   message.concat("192.168.1.129");
   server.send(200, "text/plain", message);
   msg(0);
@@ -228,6 +212,28 @@ void handleNotFound(){
   server.send(404, "text/plain", message);
   msg(0);
 }
+
+String XML;
+void handleXML(){
+  buildXML();
+  server.send(200,"text/xml",XML);
+}
+// создаем xml данные
+void buildXML(){
+  XML="<?xml version='1.0'?>";
+  XML+="<Donnees>"; 
+    XML+="<response>";
+    XML+="$value";
+    XML+="</response>";
+    XML+="<alert_time>";
+    XML+="$value";
+    XML+="</alert_time>";
+    XML+="<time>";
+    XML+="$value";
+    XML+="</time>";
+  XML+="</Donnees>"; 
+}
+
 void handleFileUpload() {
  if (server.uri() != "/upload") return;
  HTTPUpload& upload = server.upload();
@@ -362,10 +368,11 @@ void setup(void){
  server.on("/",  handleRoot);
  server.onNotFound(handleNotFound);
  server.on("/down",  handleFileDownload);
- server.on("/u", HTTP_GET, [](){server.sendHeader("Connection", "close");server.send(200, "text/html", serverIndex);});
+ //server.on("/u", HTTP_GET, [](){server.sendHeader("Connection", "close");server.send(200, "text/html", serverIndex);});
  server.on("/up", HTTP_GET, [](){server.sendHeader("Connection", "close");server.send(200, "text/html", serverUpload);});
  server.on("/u", HTTP_POST, handleFileUpload);
-
+ server.on("/xml",handleXML); // формирование xml страницы для передачи данных в web интерфейс
+ 
  server.on("/update", HTTP_POST, [](){
    server.sendHeader("Connection", "close");
    server.send(200, "text/plain", (Update.hasError())?"FAIL":"OK");
