@@ -105,7 +105,15 @@ void showfirst(int s1,int s2, int s3)
   pt6311_driver.data(ss[s3], false, false);
   pt6311_driver.data(0, false, true);  
 }
-
+void show1(int s1)
+{
+  //27
+  pt6311_driver.addrSetCmd(27);
+  pt6311_driver.displayMemWriteCmd(true, false);
+  pt6311_driver.data(sf[s1]+0, false, false);
+  pt6311_driver.data(ss[s1], false, false);
+  pt6311_driver.data(0, false, true);
+}
 void showtime(int h, int m,int ss)
 {
   //18
@@ -214,10 +222,7 @@ void handleNotFound(){
 }
 
 String XML;
-void handleXML(){
-  buildXML();
-  server.send(200,"text/xml",XML);
-}
+
 // создаем xml данные
 void buildXML(){
   XML="<?xml version='1.0'?>";
@@ -233,7 +238,10 @@ void buildXML(){
     XML+="</time>";
   XML+="</Donnees>"; 
 }
-
+void handleXML(){
+  buildXML();
+  server.send(200,"text/xml",XML);
+}
 void handleFileUpload() {
  if (server.uri() != "/upload") return;
  HTTPUpload& upload = server.upload();
@@ -320,6 +328,10 @@ void synctime()
     hour = (epoch  % 86400L) / 3600;
     minute = (epoch  % 3600) / 60;
     second = epoch % 60;
+
+    weekday=(epoch/60/60/24+4)%7; // day week, 0-sunday
+
+
     Serial.print("The UTC time is ");       // UTC is the time at Greenwich Meridian (GMT)
     Serial.print((epoch  % 86400L) / 3600); // print the hour (86400 equals secs per day)
     Serial.print(':');
@@ -342,17 +354,26 @@ void myinitf(){
   
   }
 void myinitl(){}
+void writeled(int a){
+  pt6311_driver.displayLEDWriteCmd(true, false);
+  pt6311_driver.data(a, false, true);
+}
 
-void setup(void){
- //----------------Display INIT
-  pt6311_driver.init(VFD_CS_PIN, VFD_CLK_PIN, VFD_DATA_PIN);
-  pt6311_driver.reset(VFD_DISP_MODE_10D18S); // good VFD_DISP_MODE_10D18S
-   for (uint8_t i = 0; i < 12; i++) 
+void emptyscreen(void){
+  for (uint8_t i = 0; i < 12; i++) 
   {
       fill_mem(0x00, VFD_BYTES_PER_DIGIT, i * VFD_BYTES_PER_DIGIT);
       delay(10); 
   }
-  showtime(0,0,0);
+}
+void setup(void){
+ //----------------Display INIT
+  pt6311_driver.init(VFD_CS_PIN, VFD_CLK_PIN, VFD_DATA_PIN);
+  pt6311_driver.reset(VFD_DISP_MODE_10D18S); // good VFD_DISP_MODE_10D18S
+  emptyscreen();
+  //showtime(0,0,0);
+  writeled(0);
+
   //----------------Display
 
  Serial.begin(9600);
@@ -429,6 +450,16 @@ void loop(void){
    Serial.print(":");
    Serial.print(second);
    Serial.println(".");
-   showtime(hour,minute,second);
+   
+   if((weekday>0)and(weekday<6)and(hour>=8)and (hour<=17))  {
+     emptyscreen();
+     writeled(255);
+   }
+    else{
+      writeled(0); 
+      show1(weekday);
+      showtime(hour,minute,second);
+    }
+
    }
 }

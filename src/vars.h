@@ -33,6 +33,7 @@ unsigned long delaytime=250;
 long interval = 1000;// интервал повторения цикличных действий в теле loop
 unsigned long previousMillis = 0;
 byte hour, minute, second;
+byte weekday;// день недели
 boolean point;
 unsigned int localPort = 2390;      // local port to listen for UDP packets
 IPAddress timeServerIP; // time.nist.gov NTP server address
