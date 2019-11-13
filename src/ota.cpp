@@ -429,6 +429,9 @@ void setup(void){
  Serial.println("Stop Setup");
  udp.begin(localPort);
  synctime();// синхронизируем время при включении
+
+ 
+
  }
 //----------------------- LOOP ---------------------------
 void loop(void){
