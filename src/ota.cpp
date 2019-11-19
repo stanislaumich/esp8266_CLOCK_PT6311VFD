@@ -456,7 +456,7 @@ void loop(void){
    
    if((weekday>0)and(weekday<6)and(hour>=8)and (hour<=17))  {
      emptyscreen();
-     writeled(255);
+     //writeled(255);
    }
     else{
       writeled(0); 
