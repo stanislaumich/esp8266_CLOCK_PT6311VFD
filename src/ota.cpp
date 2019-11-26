@@ -20,7 +20,7 @@
 #define NODEMCU_D3 0
 #define NODEMCU_D4 2
 #define NODEMCU_D5 14
-#define NODEMCU_D6 12
+#define NODEMCU_D6 12 //gpio12
 #define NODEMCU_D7 13
 #define NODEMCU_D8 15
 #define NODEMCU_D9 3
